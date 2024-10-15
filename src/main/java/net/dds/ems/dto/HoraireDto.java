@@ -10,5 +10,6 @@ public record HoraireDto(
         LocalTime dateDebut,
         LocalTime dateFin,
         String jour,
-        String revendeur
+        String revendeur,
+        String auteur
 ) {}

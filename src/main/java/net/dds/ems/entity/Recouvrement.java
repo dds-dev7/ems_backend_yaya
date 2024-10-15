@@ -22,20 +22,18 @@ public class Recouvrement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "recouvreur_id", referencedColumnName = "id")
     private Recouvreur agentRecouvreur;
 
-
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "revendeur_id", referencedColumnName = "id")
     private Revendeur agentRevendeur;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "service_id", referencedColumnName = "id")
     private Service service;
 
@@ -43,5 +41,4 @@ public class Recouvrement {
     private Double montant;
 
     private LocalDateTime date;
-
 }

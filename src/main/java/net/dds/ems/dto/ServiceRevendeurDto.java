@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record ServiceRevendeurDto(
         Integer id,
         Double soldeAutorise,
-        String service,
-        String revendeur,
+        ServiceDto service,
+        RevendeurDto revendeur,
         Double montantCaisse
 ) {}

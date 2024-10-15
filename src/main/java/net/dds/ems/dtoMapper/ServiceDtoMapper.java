@@ -11,6 +11,9 @@ public class ServiceDtoMapper implements Function<Service, ServiceDto>{
 
     @Override
     public ServiceDto apply(Service service) {
-        return new ServiceDto(service.getId(), service.getNom());
+        return new ServiceDto(
+                service.getId(),
+                service.getNom(),
+                service.getAdmin().getNom());
     }
 }

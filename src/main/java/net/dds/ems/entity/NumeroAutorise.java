@@ -19,9 +19,12 @@ public class NumeroAutorise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @NotNull
     private Integer numero;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+    private Admin admin;
 
 }

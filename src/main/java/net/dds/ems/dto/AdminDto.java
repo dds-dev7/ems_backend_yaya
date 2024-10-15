@@ -6,5 +6,5 @@ public record AdminDto(
         String nom,
         String numero,
         Boolean statut,
-        String role
+        RoleDto role
 ) {}

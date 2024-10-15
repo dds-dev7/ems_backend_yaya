@@ -26,7 +26,7 @@ public class TransfertInternational {
     private Integer id;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "compte_id",referencedColumnName = "id")
     private CompteInternationale compte;
 
@@ -34,8 +34,8 @@ public class TransfertInternational {
     private String destinateur;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "expediteur_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "revendeur_id", referencedColumnName = "id")
     private Revendeur expediteur;
 
     @NotNull

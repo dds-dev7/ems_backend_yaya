@@ -11,6 +11,10 @@ public class NumeroAutoriseDtoMapper implements Function<NumeroAutorise, NumeroA
 
     @Override
     public NumeroAutoriseDto apply(NumeroAutorise numeroAutorise) {
-        return new NumeroAutoriseDto(numeroAutorise.getId(), numeroAutorise.getNumero());
+        return new NumeroAutoriseDto(
+                numeroAutorise.getId(),
+                numeroAutorise.getNumero(),
+                numeroAutorise.getAdmin().getNom()
+                );
     }
 }

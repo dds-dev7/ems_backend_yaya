@@ -21,13 +21,14 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(max=30)
     @NotEmpty
     private String nom;
 
-
-    @Size(max=30)
     @NotEmpty
     private String droit;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+    private Admin auteur;
 }

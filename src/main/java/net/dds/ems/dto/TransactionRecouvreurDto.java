@@ -6,7 +6,7 @@ public record TransactionRecouvreurDto(
         Integer id,
         String type,
         Double montant,
-        String effectuerPar,
-        String assignerA,
+        RecouvreurDto effectuerPar,
+        CaissierDto assignerA,
         LocalDateTime date
 ) {}

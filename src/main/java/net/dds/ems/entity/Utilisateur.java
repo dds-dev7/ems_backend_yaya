@@ -18,11 +18,9 @@ public abstract class Utilisateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(max=30, message = "Nom devrait etre superieur a 30 caracteres")
     @NotEmpty
     private String nom;
 
-    @Size(max=10, message = "Numero devrait etre superieur a 10 caracteres")
     @NotEmpty( message = "Numero ne devrait pas etre vide")
     private String numero;
 
@@ -30,12 +28,11 @@ public abstract class Utilisateur {
     @NotNull(message = "Statut ne devrait pas etre nulle")
     private Boolean statut;
 
-    @Size(min=8, message = "Mot de passse ne devrait pas etre inferieur a 8")
     @NotEmpty(message = "Mot de passe ne devrait pas etre nulle")
     private String motDePasse;
 
     @NotNull(message = "Role ne devrait pas etre nulle")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}   )
+    @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 

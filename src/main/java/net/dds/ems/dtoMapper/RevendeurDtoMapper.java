@@ -1,13 +1,21 @@
 package net.dds.ems.dtoMapper;
 
 import net.dds.ems.dto.RevendeurDto;
+import net.dds.ems.entity.Recouvreur;
 import net.dds.ems.entity.Revendeur;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
 @Component
 public class RevendeurDtoMapper implements Function<Revendeur, RevendeurDto>{
+
+    @Autowired
+    private RecouvreurDtoMapper recouvreurDtoMapper;
+
+    @Autowired
+    private RoleDtoMapper roleDtoMapper;
 
     @Override
     public RevendeurDto apply(Revendeur revendeur) {
@@ -17,7 +25,7 @@ public class RevendeurDtoMapper implements Function<Revendeur, RevendeurDto>{
                 revendeur.getNumero(),
                 revendeur.getNumeroIdentifiant(),
                 revendeur.getStatut(),
-                revendeur.getRole().getNom(),
+                roleDtoMapper.apply(revendeur.getRole()),
                 revendeur.getQuartier(),
                 revendeur.getVille(),
                 revendeur.getNumeroDePiece(),
@@ -29,7 +37,7 @@ public class RevendeurDtoMapper implements Function<Revendeur, RevendeurDto>{
                 revendeur.getCrediterCaisse(),
                 revendeur.getVendreDirectement(),
                 revendeur.getDateNaissance(),
-                revendeur.getRecouvreur().getNom(),
+                recouvreurDtoMapper.apply(revendeur.getRecouvreur()),
                 revendeur.getDateCreation());
     }
 }

@@ -18,16 +18,18 @@ public class CompteInternationale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @NotEmpty(message= "Pays ne devrait pas etre vide")
     private String pays;
-
 
     @NotEmpty(message = "MNC ne devrait pas etre vide")
     private String mnc;
 
-
     @NotNull(message= "Comission ne devrait pas etre nulle")
     private Double commission;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+    private Admin admin;
 
 }

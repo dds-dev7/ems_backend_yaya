@@ -11,6 +11,13 @@ public class HoraireDtoMapper implements Function<Horaire, HoraireDto>{
 
     @Override
     public HoraireDto apply(Horaire horaire) {
-        return new HoraireDto(horaire.getId(), horaire.getDateDebut(), horaire.getDateFin(),horaire.getJour(), horaire.getRevendeur().getNom());
+        return new HoraireDto(
+                horaire.getId(),
+                horaire.getDateDebut(),
+                horaire.getDateFin(),
+                horaire.getJour(),
+                horaire.getRevendeur().getNom(),
+                horaire.getAuteur().getNom()
+                );
     }
 }

@@ -6,7 +6,7 @@ public record RecouvrementDto(
         Integer id,
         Double montant,
         String service,
-        String recouvreur,
-        String revendeur,
+        RecouvreurDto recouvreur,
+        RevendeurDto revendeur,
         LocalDateTime date
 ) {}

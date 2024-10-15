@@ -24,12 +24,12 @@ public class ServiceRevendeur {
     private Double soldeAutorise;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "expediteur_id", referencedColumnName = "id")
     private Service service;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "revendeur_id", referencedColumnName = "id")
     private Revendeur revendeur;
 

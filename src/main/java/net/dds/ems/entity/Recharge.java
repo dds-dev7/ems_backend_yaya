@@ -37,16 +37,16 @@ public class Recharge {
     private String statut;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "service", referencedColumnName = "id")
     private Service service;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName ="id")
     private Admin admin;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "revendeur_id", referencedColumnName ="id")
     private Revendeur assignerA;
 

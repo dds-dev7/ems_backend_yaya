@@ -9,7 +9,7 @@ public record SousCaissierDto(
         String numero,
         Integer numeroIdentifiant,
         Boolean statut,
-        String role,
+        RoleDto role,
         String quartier,
         String Ville,
         LocalDateTime dateCreation

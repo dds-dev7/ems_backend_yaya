@@ -8,8 +8,8 @@ public record RechargeDto(
         Double montant,
         LocalDateTime date,
         String statut,
-        String service,
-        String admin,
-        String assignerA,
+        ServiceDto service,
+        String adminNom,
+        RevendeurDto assignerA,
         String acteur
 ) {}

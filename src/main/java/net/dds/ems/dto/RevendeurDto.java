@@ -10,7 +10,7 @@ public record RevendeurDto(
         String numero,
         Integer numeroIdentifiant,
         Boolean statut,
-        String role,
+        RoleDto role,
         String quartier,
         String Ville,
         String numeroDePiece,
@@ -22,6 +22,6 @@ public record RevendeurDto(
         Boolean crediterCaisse,
         Boolean vendreDirectement,
         LocalDate dateNaissance,
-        String recouvreur,
+        RecouvreurDto recouvreur,
         LocalDateTime dateCreation
 ) {}

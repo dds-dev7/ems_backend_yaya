@@ -29,12 +29,12 @@ public class TransactionRecouvreur {
     private Double montant;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "recouvreur_id", referencedColumnName = "id")
     private Recouvreur effectuerPar;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "caissier_id", referencedColumnName = "id")
     private Caissier assignerA;
 
