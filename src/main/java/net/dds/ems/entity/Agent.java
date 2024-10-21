@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue("AGENT")
@@ -23,7 +24,7 @@ public abstract class Agent extends Utilisateur {
     private Integer numeroIdentifiant;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime dateCreation;
+    private Date dateCreation;
 
     @NotEmpty(message = "Ville ne devrait pas etre vide")
     @Size(max = 30, message = "Ville devrait etre superieur a 30 caracteres")

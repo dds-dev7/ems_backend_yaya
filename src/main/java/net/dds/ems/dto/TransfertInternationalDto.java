@@ -3,6 +3,7 @@ package net.dds.ems.dto;
 import net.dds.ems.entity.CompteInternationale;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public record TransfertInternationalDto(
         Integer id,
@@ -11,5 +12,5 @@ public record TransfertInternationalDto(
         RevendeurDto expediteur,
         Double montant,
         Double frais,
-        LocalDateTime date
+        Date date
 ) {}

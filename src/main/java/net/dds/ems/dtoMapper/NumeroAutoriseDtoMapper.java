@@ -17,4 +17,11 @@ public class NumeroAutoriseDtoMapper implements Function<NumeroAutorise, NumeroA
                 numeroAutorise.getAdmin().getNom()
                 );
     }
+
+    public NumeroAutorise toEntity(NumeroAutoriseDto numeroAutoriseDTO) {
+        NumeroAutorise numeroAutorise = new NumeroAutorise();
+        numeroAutorise.setId(numeroAutoriseDTO.id());
+        numeroAutorise.setNumero(numeroAutoriseDTO.numero());
+        return numeroAutorise;
+    }
 }

@@ -23,6 +23,7 @@ public class RevendeurDtoMapper implements Function<Revendeur, RevendeurDto>{
                 revendeur.getId(),
                 revendeur.getNom(),
                 revendeur.getNumero(),
+                revendeur.getMotDePasse(),
                 revendeur.getNumeroIdentifiant(),
                 revendeur.getStatut(),
                 roleDtoMapper.apply(revendeur.getRole()),
@@ -39,5 +40,25 @@ public class RevendeurDtoMapper implements Function<Revendeur, RevendeurDto>{
                 revendeur.getDateNaissance(),
                 recouvreurDtoMapper.apply(revendeur.getRecouvreur()),
                 revendeur.getDateCreation());
+    }
+
+    public Revendeur toEntity(RevendeurDto enrolleurDTO) {
+        Revendeur enrolleur = new Revendeur();
+        enrolleur.setId(enrolleurDTO.id());
+        enrolleur.setNom(enrolleurDTO.nom());
+        enrolleur.setNumero(enrolleurDTO.numero());
+        enrolleur.setMotDePasse(enrolleurDTO.motDePasse());
+        enrolleur.setNumeroIdentifiant(enrolleurDTO.numeroIdentifiant());
+        enrolleur.setStatut(enrolleurDTO.statut());
+        enrolleur.setRole(roleDtoMapper.toEntity(enrolleurDTO.role()));
+        enrolleur.setQuartier(enrolleurDTO.quartier());
+        enrolleur.setVille(enrolleurDTO.ville());
+        enrolleur.setNumeroDePiece(enrolleurDTO.numeroDePiece());
+        enrolleur.setTelephoneAirtel(enrolleurDTO.telephoneAirtel());
+        enrolleur.setTelephoneMoov(enrolleurDTO.telephoneMoov());
+        enrolleur.setTelephoneFlash(enrolleurDTO.telephoneFlash());
+        enrolleur.setCrediterCaisse(enrolleurDTO.crediterCaisse());
+        enrolleur.setDateCreation(enrolleurDTO.dateCreation());
+        return enrolleur;
     }
 }

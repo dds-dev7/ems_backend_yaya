@@ -20,4 +20,13 @@ public class CompteInternationaleDtoMapper implements Function<CompteInternation
                 compteInternationale.getCommission(),
                 compteInternationale.getAdmin().getNom());
     }
+
+    public CompteInternationale toEntity(CompteInternationaleDto compteInternationaleDTO) {
+        CompteInternationale compteInternationale = new CompteInternationale();
+        compteInternationale.setId(compteInternationaleDTO.id());
+        compteInternationale.setPays(compteInternationaleDTO.pays());
+        compteInternationale.setMnc(compteInternationaleDTO.mNC());
+        compteInternationale.setCommission(compteInternationaleDTO.commission());
+        return compteInternationale;
+    }
 }

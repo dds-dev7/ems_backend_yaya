@@ -24,9 +24,9 @@ public class AdminController {
     private AdminService adminService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/create")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) throws Exception {
-        Admin createdAdmin = this.adminService.createAdmin(admin);
+    @PostMapping(path = "/inscription")
+    public ResponseEntity<AdminDto> createAdmin(@RequestBody AdminDto adminDto) throws Exception {
+        AdminDto createdAdmin = this.adminService.createAdmin(adminDto);
         return new ResponseEntity<>(createdAdmin, HttpStatus.CREATED);
     }
 
@@ -44,8 +44,8 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Admin> modifier(@PathVariable int id, @RequestBody Admin admin) throws Exception {
-        Admin updatedAdmin = this.adminService.updateAdmin(id, admin);
+    public ResponseEntity<AdminDto> updateAdmin(@RequestBody AdminDto adminDto) throws Exception {
+        AdminDto updatedAdmin = this.adminService.updateAdmin(adminDto);
         return new ResponseEntity<>(updatedAdmin, HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package net.dds.ems.dtoMapper;
 
 import net.dds.ems.dto.TransfertInternationalDto;
 import net.dds.ems.entity.TransfertInternational;
+import net.dds.ems.entity.TransfertInternational;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,5 +27,17 @@ public class TransfertInternationalDtoMapper implements Function<TransfertIntern
                 transfertInternational.getMontant(),
                 transfertInternational.getFrais(),
                 transfertInternational.getDate());
+    }
+
+    public TransfertInternational toEntity(TransfertInternationalDto transfertInternationalDto) {
+        TransfertInternational transfertInternational = new TransfertInternational();
+        transfertInternational.setId(transfertInternationalDto.id());
+        transfertInternational.setCompte(compteInternationaleDtoMapper.toEntity(transfertInternationalDto.compte()));
+        transfertInternational.setDestinateur(transfertInternationalDto.destinateur());
+        transfertInternational.setExpediteur(revendeurDtoMapper.toEntity(transfertInternationalDto.expediteur()));
+        transfertInternational.setMontant(transfertInternationalDto.montant());
+        transfertInternational.setFrais(transfertInternationalDto.frais());
+        transfertInternational.setDate(transfertInternationalDto.date());
+        return transfertInternational;
     }
 }

@@ -1,6 +1,8 @@
 package net.dds.ems.dtoMapper;
 
 import net.dds.ems.dto.ServiceDto;
+import net.dds.ems.dto.ServiceDto;
+import net.dds.ems.entity.Service;
 import net.dds.ems.entity.Service;
 import org.springframework.stereotype.Component;
 
@@ -15,5 +17,12 @@ public class ServiceDtoMapper implements Function<Service, ServiceDto>{
                 service.getId(),
                 service.getNom(),
                 service.getAdmin().getNom());
+    }
+
+    public Service toEntity(ServiceDto serviceDTO) {
+        Service service = new Service();
+        service.setId(serviceDTO.id());
+        service.setNom(serviceDTO.nom());
+        return service;
     }
 }

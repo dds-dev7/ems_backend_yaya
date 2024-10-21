@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public record RecouvrementDto(
         Integer id,
         Double montant,
-        String service,
-        RecouvreurDto recouvreur,
-        RevendeurDto revendeur,
+        ServiceDto service,
+        RecouvreurDto agentRecouvreur,
+        RevendeurDto agentRevendeur,
         LocalDateTime date
 ) {}

@@ -23,4 +23,14 @@ public class PaiementCommissionDtoMapper implements Function<PaiementCommission,
                 paiementCommission.getAdmin().getNom(),
                 paiementCommission.getDate());
     }
+
+    public PaiementCommission toEntity(PaiementCommissionDto paiementCommissionDTO) {
+        PaiementCommission paiementCommission = new PaiementCommission();
+        paiementCommission.setId(paiementCommissionDTO.id());
+        paiementCommission.setStatut(paiementCommissionDTO.statut());
+        paiementCommission.setMontant(paiementCommissionDTO.montant());
+        paiementCommission.setServiceRevendeur(serviceRevendeurDtoMapper.toEntity(paiementCommissionDTO.serviceRevendeur()));
+        paiementCommission.setDate(paiementCommissionDTO.date());
+        return paiementCommission;
+    }
 }

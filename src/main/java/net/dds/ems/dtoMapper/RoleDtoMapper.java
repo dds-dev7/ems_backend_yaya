@@ -17,4 +17,12 @@ public class RoleDtoMapper implements Function<Role, RoleDto>{
                 role.getDroit(),
                 role.getAuteur().getNom());
     }
+
+    public Role toEntity(RoleDto roleDTO) {
+        Role role = new Role();
+        role.setId(roleDTO.id());
+        role.setNom(roleDTO.nom());
+        role.setDroit(roleDTO.droit());
+        return role;
+    }
 }

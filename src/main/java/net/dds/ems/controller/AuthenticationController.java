@@ -21,7 +21,7 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/connexion")
     public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())

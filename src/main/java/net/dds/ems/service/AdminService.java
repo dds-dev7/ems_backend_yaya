@@ -5,8 +5,8 @@ import net.dds.ems.dto.AdminDto;
 import net.dds.ems.dtoMapper.AdminDtoMapper;
 import net.dds.ems.entity.Admin;
 import net.dds.ems.entity.Role;
-import net.dds.ems.repository.UtilisateurRepository;
 import net.dds.ems.repository.RoleRepository;
+import net.dds.ems.repository.UtilisateurRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,24 @@ public class AdminService {
     private RoleRepository roleRepository;
 
     // Create an Admin admin in the single table inheritance
-    public Admin createAdmin(Admin admin) throws Exception {
+    public AdminDto createAdmin(AdminDto adminDto) throws Exception {
+        // Vérification des champs obligatoires dans le DTO
+        if (adminDto.nom() == null || adminDto.nom().trim().isEmpty()) {
+            throw new BadRequestException("Le nom est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.numero() == null || adminDto.numero().trim().isEmpty()) {
+            throw new BadRequestException("Le numero est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.statut() == null) {
+            throw new BadRequestException("Le statut est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.motDePasse() == null || adminDto.motDePasse().trim().isEmpty()) {
+            throw new BadRequestException("Le mot de passe est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.role() == null || adminDto.role().id() == null) {
+            throw new BadRequestException("Le role est obligatoire et ne doit pas etre vide");
+        }
+        Admin admin = adminDtoMapper.toEntity(adminDto);
         Role role = admin.getRole();
         if (role != null && role.getId() != 0) {
             Optional<Role> optionalRole = roleRepository.findById(role.getId());
@@ -47,13 +64,12 @@ public class AdminService {
         // Set the MotDePasse
         admin.setMotDePasse(encoder.encode(admin.getMotDePasse()));
         try {
-            this.utilisateurRepository.save(admin);
+            Admin savedAdmin = this.utilisateurRepository.save(admin);
+            return adminDtoMapper.apply(savedAdmin);
         } catch (Exception ex) {
             System.out.println(ex);
             throw new BadRequestException(ex.getMessage());
         }
-
-        return this.utilisateurRepository.save(admin);
     }
 
     // Search for an Admin by ID
@@ -86,21 +102,48 @@ public class AdminService {
 
     // Update an existing Admin
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Admin updateAdmin(int id, Admin admin) throws Exception {
-        Admin existingAdmin = this.search(id);
+    public AdminDto updateAdmin(AdminDto adminDto) throws Exception {
+        // Vérification des champs obligatoires dans le DTO
+        if (adminDto.nom() == null || adminDto.nom().trim().isEmpty()) {
+            throw new BadRequestException("Le nom est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.numero() == null || adminDto.numero().trim().isEmpty()) {
+            throw new BadRequestException("Le numero est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.statut() == null) {
+            throw new BadRequestException("Le statut est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.motDePasse() == null || adminDto.motDePasse().trim().isEmpty()) {
+            throw new BadRequestException("Le mot de passe est obligatoire et ne doit pas etre vide");
+        }
+        if (adminDto.role() == null || adminDto.role().id() == null) {
+            throw new BadRequestException("Le role est obligatoire et ne doit pas etre vide");
+        }
 
-        if (admin.getNom() != null) existingAdmin.setNom(admin.getNom());
-        if (admin.getNumero() != null) existingAdmin.setNumero(admin.getNumero());
-        if (admin.getMotDePasse() != null) existingAdmin.setMotDePasse(admin.getMotDePasse());
-        if (admin.getRole() != null) existingAdmin.setRole(admin.getRole());
+        Admin admin = adminDtoMapper.toEntity(adminDto);
+        Role role = admin.getRole();
+        if (role != null && role.getId() != 0) {
+            Optional<Role> optionalRole = roleRepository.findById(role.getId());
+            if (!optionalRole.isPresent() || !optionalRole.get().getNom().equals("ADMIN")) {
+                throw new BadRequestException("Un admin ne peut pas être assigner à ce rôle");
+            }
+            admin.setRole(optionalRole.get());
+        } else {
+            throw new BadRequestException("Erreur lors de la récupération du rôle");
+        }
+
+//        if (admin.getNom() != null) existingAdmin.setNom(admin.getNom());
+//        if (admin.getNumero() != null) existingAdmin.setNumero(admin.getNumero());
+//        if (admin.getMotDePasse() != null) existingAdmin.setMotDePasse(admin.getMotDePasse());
+//        if (admin.getRole() != null) existingAdmin.setRole(admin.getRole());
 
         try {
-            this.utilisateurRepository.save(existingAdmin);
+            Admin savedAdmin = this.utilisateurRepository.save(admin);
+            return adminDtoMapper.apply(savedAdmin);
         } catch (Exception ex) {
             throw new BadRequestException("Erreur lors de la mise à jour de l'admin, vérifiez votre syntaxe !");
         }
 
-        return this.utilisateurRepository.save(existingAdmin);
     }
 
     // Delete an Admin by ID

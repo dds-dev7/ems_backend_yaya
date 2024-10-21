@@ -13,6 +13,22 @@ public class AdminDtoMapper implements Function<Admin, AdminDto>{
     private RoleDtoMapper roleDtoMapper;
     @Override
     public AdminDto apply(Admin admin) {
-        return new AdminDto(admin.getNom(), admin.getNumero(),admin.getStatut(),roleDtoMapper.apply(admin.getRole()));
+        return new AdminDto(
+                admin.getId(),
+                admin.getNom(),
+                admin.getNumero(),
+                admin.getStatut(),
+                admin.getMotDePasse(),
+                roleDtoMapper.apply(admin.getRole()));
+    }
+
+    public Admin toEntity(AdminDto adminDTO) {
+        Admin admin = new Admin();
+        admin.setId(adminDTO.id());
+        admin.setNom(adminDTO.nom());
+        admin.setNumero(adminDTO.numero());
+        admin.setStatut(adminDTO.statut());
+        admin.setMotDePasse(adminDTO.motDePasse());
+        return admin;
     }
 }

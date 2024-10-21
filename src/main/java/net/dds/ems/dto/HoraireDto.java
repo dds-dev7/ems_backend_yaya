@@ -7,9 +7,9 @@ import java.util.Date;
 
 public record HoraireDto(
         Integer id,
-        LocalTime dateDebut,
-        LocalTime dateFin,
+        LocalTime heureDebut,
+        LocalTime heureFin,
         String jour,
-        String revendeur,
+        RevendeurDto revendeur,
         String auteur
 ) {}

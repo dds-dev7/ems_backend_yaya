@@ -8,11 +8,12 @@ public record RevendeurDto(
         Integer id,
         String nom,
         String numero,
+        String motDePasse,
         Integer numeroIdentifiant,
         Boolean statut,
         RoleDto role,
         String quartier,
-        String Ville,
+        String ville,
         String numeroDePiece,
         String secteurActivite,
         String typeDePiece,
@@ -23,5 +24,5 @@ public record RevendeurDto(
         Boolean vendreDirectement,
         LocalDate dateNaissance,
         RecouvreurDto recouvreur,
-        LocalDateTime dateCreation
+        Date dateCreation
 ) {}

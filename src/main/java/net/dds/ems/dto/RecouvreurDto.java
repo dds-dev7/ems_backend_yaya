@@ -7,10 +7,11 @@ public record RecouvreurDto(
         Integer id,
         String nom,
         String numero,
+        String motDePasse,
         Integer numeroIdentifiant,
         Boolean statut,
         RoleDto role,
         String quartier,
-        String Ville,
-        LocalDateTime dateCreation
+        String ville,
+        Date dateCreation
 ) {}

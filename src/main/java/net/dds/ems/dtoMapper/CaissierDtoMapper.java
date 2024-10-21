@@ -18,11 +18,27 @@ public class CaissierDtoMapper implements Function<Caissier, CaissierDto>{
                 caissier.getId(),
                 caissier.getNom(),
                 caissier.getNumero(),
+                caissier.getMotDePasse(),
                 caissier.getNumeroIdentifiant(),
                 caissier.getStatut(),
                 roleDtoMapper.apply(caissier.getRole()),
                 caissier.getQuartier(),
                 caissier.getVille(),
                 caissier.getDateCreation());
+    }
+
+    public Caissier toEntity(CaissierDto caissierDTO) {
+        Caissier caissier = new Caissier();
+        caissier.setId(caissierDTO.id());
+        caissier.setNom(caissierDTO.nom());
+        caissier.setNumero(caissierDTO.numero());
+        caissier.setMotDePasse(caissierDTO.motDePasse());
+        caissier.setNumeroIdentifiant(caissierDTO.numeroIdentifiant());
+        caissier.setStatut(caissierDTO.statut());
+        caissier.setRole(roleDtoMapper.toEntity(caissierDTO.role()));
+        caissier.setQuartier(caissierDTO.quartier());
+        caissier.setVille(caissierDTO.ville());
+        caissier.setDateCreation(caissierDTO.dateCreation());
+        return caissier;
     }
 }

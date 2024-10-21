@@ -45,7 +45,6 @@ public class TransfertInternational {
     private Double frais;
 
     @NotNull
-    private LocalDateTime date;
-
+    private Date date;
 
 }

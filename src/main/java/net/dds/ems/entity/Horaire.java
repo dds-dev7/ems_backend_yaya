@@ -26,11 +26,11 @@ public class Horaire {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime dateDebut;
+    private LocalTime heureDebut;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime dateFin;
+    private LocalTime heureFin;
 
 
     @NotEmpty

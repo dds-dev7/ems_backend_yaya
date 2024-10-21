@@ -30,4 +30,17 @@ public class RechargeDtoMapper implements Function<Recharge, RechargeDto>{
                 recharge.getActeur()
                 );
     }
+
+    public Recharge toEntity(RechargeDto rechargeDTO) {
+        Recharge recharge = new Recharge();
+        recharge.setId(rechargeDTO.id());
+        recharge.setType(rechargeDTO.type());
+        recharge.setMontant(rechargeDTO.montant());
+        recharge.setDate(rechargeDTO.date());
+        recharge.setStatut(rechargeDTO.statut());
+        recharge.setService(serviceDtoMapper.toEntity(rechargeDTO.service()));
+        recharge.setAssignerA(revendeurDtoMapper.toEntity(rechargeDTO.assignerA()));
+        recharge.setActeur(rechargeDTO.acteur());
+        return recharge;
+    }
 }

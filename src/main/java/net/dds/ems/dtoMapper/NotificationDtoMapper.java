@@ -11,6 +11,17 @@ public class NotificationDtoMapper implements Function<Notification, Notificatio
 
     @Override
     public NotificationDto apply(Notification notification) {
-        return new NotificationDto(notification.getId(), notification.getMessage(), notification.getEtat());
+        return new NotificationDto(
+                notification.getId(),
+                notification.getMessage(),
+                notification.getEtat());
+    }
+
+    public Notification toEntity(NotificationDto notificationDTO) {
+        Notification notification = new Notification();
+        notification.setId(notificationDTO.id());
+        notification.setMessage(notificationDTO.message());
+        notification.setEtat(notificationDTO.etat());
+        return notification;
     }
 }

@@ -24,7 +24,6 @@ public abstract class Utilisateur {
     @NotEmpty( message = "Numero ne devrait pas etre vide")
     private String numero;
 
-
     @NotNull(message = "Statut ne devrait pas etre nulle")
     private Boolean statut;
 
