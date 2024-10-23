@@ -27,8 +27,4 @@ public class Role {
     @NotEmpty
     private String droit;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "admin_id", referencedColumnName = "id")
-    private Admin auteur;
 }

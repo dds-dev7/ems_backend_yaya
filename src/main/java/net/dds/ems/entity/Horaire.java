@@ -32,16 +32,13 @@ public class Horaire {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime heureFin;
 
-
     @NotEmpty
     private String jour;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "revendeur_id", referencedColumnName = "id")
     private Revendeur revendeur;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin Auteur;

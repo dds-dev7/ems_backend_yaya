@@ -50,9 +50,7 @@ public class ServiceRevendeurService {
 
         Revendeur revendeur = serviceRevendeur.getRevendeur();
         if (revendeur != null && revendeur.getId() != 0) {
-            Optional<Revendeur> optionalRevendeur= utilisateurRepository.findById(revendeur.getId())
-                    .filter(utilisateur -> utilisateur instanceof Revendeur)
-                    .map(utilisateur -> (Revendeur) utilisateur);
+            Optional<Revendeur> optionalRevendeur= revendeurRepository.findById(revendeur.getId());
             serviceRevendeur.setRevendeur(optionalRevendeur.orElseThrow(()-> new EntityNotFoundException("This revendeur doesn't exist")));
         }else{
             throw new BadRequestException("Error getting revendeur");
@@ -105,9 +103,7 @@ public class ServiceRevendeurService {
 
         if (serviceRevendeur.getRevendeur() != null && serviceRevendeur.getRevendeur().getId() != null) {
             int idRevendeur = serviceRevendeur.getRevendeur().getId();
-            Optional<Revendeur> optionalRevendeur = utilisateurRepository.findById(idRevendeur)
-                    .filter(utilisateur -> utilisateur instanceof Revendeur)
-                    .map(utilisateur -> (Revendeur) utilisateur);
+            Optional<Revendeur> optionalRevendeur = revendeurRepository.findById(idRevendeur);
             existingServiceRevendeur.setRevendeur(optionalRevendeur.orElseThrow(() -> new EntityNotFoundException("Revendeur non trouvé")));
         }
 

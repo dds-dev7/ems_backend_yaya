@@ -4,20 +4,54 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity
-@DiscriminatorValue("REVENDEUR")
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
+
 @AllArgsConstructor
-@Getter
-@Setter
-public class Revendeur extends Agent {
+@NoArgsConstructor
+@Data
+@Entity
+public class Revendeur {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @NotEmpty
+    private String nom;
+
+    @NotEmpty( message = "Numero ne devrait pas etre vide")
+    private String numero;
+
+    @NotNull(message = "Statut ne devrait pas etre nulle")
+    private Boolean statut;
+
+    @NotEmpty(message = "Mot de passe ne devrait pas etre nulle")
+    private String motDePasse;
+
+    @NotNull(message = "Role ne devrait pas etre nulle")
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
+
+    @NotEmpty(message = "Quartier ne devrait pas etre vide")
+    @Size(max = 30, message = "Quartier devrait etre superieur a 30 caracteres")
+    private String quartier;
+
+    private Integer numeroIdentifiant;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date dateCreation;
+
+    @NotEmpty(message = "Ville ne devrait pas etre vide")
+    @Size(max = 30, message = "Ville devrait etre superieur a 30 caracteres")
+    private String ville;
 
     @NotEmpty(message = "Numero de piece ne devrait pas etre vide")
     private String numeroDePiece;

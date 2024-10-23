@@ -28,12 +28,10 @@ public class PaiementCommission {
     @NotNull
     private Double montant;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "service_revendeur_id", referencedColumnName = "id")
     private ServiceRevendeur serviceRevendeur;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;

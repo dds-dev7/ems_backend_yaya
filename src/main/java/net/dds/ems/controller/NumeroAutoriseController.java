@@ -23,8 +23,8 @@ public class NumeroAutoriseController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<NumeroAutorise> createNumeroAutorise(@RequestBody NumeroAutorise numeroAutorise) throws Exception {
-        NumeroAutorise createdNumeroAutorise = this.numeroAutoriseService.createNumeroAutorise(numeroAutorise);
+    public ResponseEntity<NumeroAutoriseDto> createNumeroAutorise(@RequestBody NumeroAutoriseDto numeroAutorise) throws Exception {
+        NumeroAutoriseDto createdNumeroAutorise = this.numeroAutoriseService.createNumeroAutorise(numeroAutorise);
         return new ResponseEntity<>(createdNumeroAutorise, HttpStatus.CREATED);
     }
 
@@ -34,14 +34,14 @@ public class NumeroAutoriseController {
     }
 
     @GetMapping(path = "/read/{id}")
-    public Stream<NumeroAutoriseDto> showNumeroAutoriseById(@PathVariable int id){
+    public NumeroAutoriseDto showNumeroAutoriseById(@PathVariable int id){
         return this.numeroAutoriseService.showNumeroAutoriseById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<NumeroAutorise> updateNumeroAutorise(@PathVariable int id, @RequestBody NumeroAutorise numeroAutorise) throws Exception {
-        NumeroAutorise updatedNumeroAutorise = this.numeroAutoriseService.updateNumeroAutorise(id, numeroAutorise);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<NumeroAutoriseDto> updateNumeroAutorise(@RequestBody NumeroAutoriseDto numeroAutorise) throws Exception {
+        NumeroAutoriseDto updatedNumeroAutorise = this.numeroAutoriseService.updateNumeroAutorise(numeroAutorise);
         return new ResponseEntity<>(updatedNumeroAutorise, HttpStatus.CREATED);
     }
 

@@ -36,7 +36,6 @@ public class Recharge {
 
     private String statut;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "service", referencedColumnName = "id")
     private Service service;
@@ -45,7 +44,6 @@ public class Recharge {
     @JoinColumn(name = "admin_id", referencedColumnName ="id")
     private Admin admin;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "revendeur_id", referencedColumnName ="id")
     private Revendeur assignerA;

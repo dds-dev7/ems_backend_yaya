@@ -21,11 +21,10 @@ public class RechargeController {
     @Autowired
     private RechargeService rechargeService;
 
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<Recharge> createRecharge(@RequestBody Recharge recharge) throws Exception {
-        Recharge createdRecharge = this.rechargeService.createRecharge(recharge);
+    public ResponseEntity<RechargeDto> createRecharge(@RequestBody RechargeDto recharge) throws Exception {
+        RechargeDto createdRecharge = this.rechargeService.createRecharge(recharge);
         return new ResponseEntity<>(createdRecharge, HttpStatus.CREATED);
     }
 
@@ -37,7 +36,7 @@ public class RechargeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<RechargeDto> showRechargeById(@PathVariable int id){
+    public RechargeDto showRechargeById(@PathVariable int id){
         return this.rechargeService.showRechargeById(id);
     }
 

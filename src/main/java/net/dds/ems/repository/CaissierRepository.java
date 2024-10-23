@@ -1,6 +1,5 @@
 package net.dds.ems.repository;
 
-import net.dds.ems.entity.Agent;
 import net.dds.ems.entity.Caissier;
 import net.dds.ems.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -14,6 +14,7 @@ public class NotificationDtoMapper implements Function<Notification, Notificatio
         return new NotificationDto(
                 notification.getId(),
                 notification.getMessage(),
+                notification.getType(),
                 notification.getEtat());
     }
 
@@ -21,6 +22,7 @@ public class NotificationDtoMapper implements Function<Notification, Notificatio
         Notification notification = new Notification();
         notification.setId(notificationDTO.id());
         notification.setMessage(notificationDTO.message());
+        notification.setMessage(notificationDTO.type());
         notification.setEtat(notificationDTO.etat());
         return notification;
     }

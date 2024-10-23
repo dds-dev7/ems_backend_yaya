@@ -22,8 +22,8 @@ public class EnrolleurController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<Enrolleur> createEnrolleur(@RequestBody Enrolleur enrolleur) throws Exception {
-        Enrolleur createdEnrolleur = this.enrolleurService.createEnrolleur(enrolleur);
+    public ResponseEntity<EnrolleurDto> createEnrolleur(@RequestBody EnrolleurDto enrolleur) throws Exception {
+        EnrolleurDto createdEnrolleur = this.enrolleurService.createEnrolleur(enrolleur);
         return new ResponseEntity<>(createdEnrolleur, HttpStatus.CREATED);
     }
 
@@ -35,14 +35,14 @@ public class EnrolleurController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<EnrolleurDto> showEnrolleurById(@PathVariable int id){
+    public EnrolleurDto showEnrolleurById(@PathVariable int id){
         return this.enrolleurService.showEnrolleurById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Enrolleur>  updateEnrolleur(@PathVariable int id, @RequestBody Enrolleur enrolleur) throws Exception {
-        Enrolleur updatedEnrolleur = this.enrolleurService.updateEnrolleur(id, enrolleur);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<EnrolleurDto>  updateEnrolleur(@RequestBody EnrolleurDto enrolleur) throws Exception {
+        EnrolleurDto updatedEnrolleur = this.enrolleurService.updateEnrolleur(enrolleur);
         return new ResponseEntity<>(updatedEnrolleur, HttpStatus.CREATED);
     }
 

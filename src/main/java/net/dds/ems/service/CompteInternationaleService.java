@@ -26,19 +26,26 @@ public class CompteInternationaleService {
     @Autowired
     private CompteInternationaleDtoMapper compteInternationaleDtoMapper;
 
-    public CompteInternationale createCompteInternationale(CompteInternationale compteInternationale)  throws Exception{
-
+    public CompteInternationaleDto createCompteInternationale(CompteInternationaleDto compteInternationaleDto)  throws Exception{
+        // Vérification des champs obligatoires dans le DTO
+        if (compteInternationaleDto.pays() == null || compteInternationaleDto.pays().trim().isEmpty()) {
+            throw new BadRequestException("Le pays est obligatoire et ne doit pas etre vide");
+        }
+        if (compteInternationaleDto.mNC() == null || compteInternationaleDto.mNC().trim().isEmpty()) {
+            throw new BadRequestException("Le MNC est obligatoire et ne doit pas etre vide");
+        }
+        if (compteInternationaleDto.commission() == null) {
+            throw new BadRequestException("a commission est obligatoire et ne doit pas etre vide");
+        }
+        CompteInternationale compteInternationale = compteInternationaleDtoMapper.toEntity(compteInternationaleDto);
         try{
-            System.out.println(compteInternationale.getMnc());
-            this.compteInternationaleRepository.save(compteInternationale);
+            CompteInternationale savedCompteInternationale = this.compteInternationaleRepository.save(compteInternationale);
+            return compteInternationaleDtoMapper.apply(savedCompteInternationale);
 
         }catch (Exception ex){
             throw new BadRequestException("exception during creating process, Check your syntax!");
         }
-    return this.compteInternationaleRepository.save(compteInternationale);
-
     }
-
 
     public CompteInternationale search(int id) {
         Optional<CompteInternationale> optionalCompteInternationale = this.compteInternationaleRepository.findById(id);
@@ -53,29 +60,33 @@ public class CompteInternationaleService {
         }
         return this.compteInternationaleRepository.findAll().stream().map(compteInternationaleDtoMapper);
     }
-    public Stream<CompteInternationaleDto> showCompteInternationaleById(int id) {
-        if(this.compteInternationaleRepository.findById(id).isEmpty()){
-            throw new EntityNotFoundException("This CompteInternationale cannot be found")   ;
-        }
-        return this.compteInternationaleRepository.findById(id).stream().map(compteInternationaleDtoMapper);
+
+    public CompteInternationaleDto showCompteInternationaleById(int id) {
+        CompteInternationale retCompteInternation = this.compteInternationaleRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Aucun Compte ne correspond"));
+        return compteInternationaleDtoMapper.apply(retCompteInternation);
     }
 
-    public CompteInternationale updateCompteInternationale(int id, CompteInternationale compteInternationale) throws Exception {
-        CompteInternationale existingCompteInternationale = this.search(id);
-
-        if(existingCompteInternationale.getId() == id) {
-            existingCompteInternationale.setPays(compteInternationale.getPays());
-            existingCompteInternationale.setMnc(compteInternationale.getMnc());
-            existingCompteInternationale.setCommission(compteInternationale.getCommission());
-        }else{
-            throw new EntityNotFoundException("Exception updating the 'compteInternationale' check your syntax");
+    public CompteInternationaleDto updateCompteInternationale(CompteInternationaleDto compteInternationaleDto) throws Exception {
+        // Vérification des champs obligatoires dans le DTO
+        if (compteInternationaleDto.id() == null) {
+            throw new BadRequestException("Le champ id est obligatoire pour la modification");
         }
+        if (compteInternationaleDto.pays() == null || compteInternationaleDto.pays().trim().isEmpty()) {
+            throw new BadRequestException("Le pays est obligatoire et ne doit pas etre vide");
+        }
+        if (compteInternationaleDto.mNC() == null || compteInternationaleDto.mNC().trim().isEmpty()) {
+            throw new BadRequestException("Le MNC est obligatoire et ne doit pas etre vide");
+        }
+        if (compteInternationaleDto.commission() == null) {
+            throw new BadRequestException("a commission est obligatoire et ne doit pas etre vide");
+        }
+        CompteInternationale compteInternationale = compteInternationaleDtoMapper.toEntity(compteInternationaleDto);
         try{
-            this.compteInternationaleRepository.save(existingCompteInternationale);
+            CompteInternationale savedCompteInternationale = this.compteInternationaleRepository.save(compteInternationale);
+            return compteInternationaleDtoMapper.apply(savedCompteInternationale);
         }catch (Exception ex){
             throw new BadRequestException("bad syntax for updating compteInternationale");
         }
-        return compteInternationaleRepository.save(existingCompteInternationale);
     }
 
     public void deleteCompteInternationale(int id) {

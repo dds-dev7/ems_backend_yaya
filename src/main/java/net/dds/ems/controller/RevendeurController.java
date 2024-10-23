@@ -37,7 +37,7 @@ public class RevendeurController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<RevendeurDto> showRevendeurById(@PathVariable int id){
+    public RevendeurDto showRevendeurById(@PathVariable int id){
         return this.revendeurService.showRevendeurById(id);
     }
 

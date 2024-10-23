@@ -1,10 +1,13 @@
 package net.dds.ems.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Or InheritanceType.JOINED
@@ -27,12 +30,18 @@ public abstract class Utilisateur {
     @NotNull(message = "Statut ne devrait pas etre nulle")
     private Boolean statut;
 
-    @NotEmpty(message = "Mot de passe ne devrait pas etre nulle")
     private String motDePasse;
 
-    @NotNull(message = "Role ne devrait pas etre nulle")
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+
+    private String quartier;
+
+    private Integer numeroIdentifiant;
+
+    private Date dateCreation;
+
+    private String ville;
 
 }

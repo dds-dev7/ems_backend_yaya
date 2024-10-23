@@ -23,6 +23,9 @@ public class Notification {
     private String message;
 
     @NotEmpty
+    private String type;
+
+    @NotEmpty
     private String etat;
 
 }

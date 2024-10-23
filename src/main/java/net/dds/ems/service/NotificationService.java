@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import net.dds.ems.dto.NotificationDto;
 import net.dds.ems.dtoMapper.NotificationDtoMapper;
 import net.dds.ems.entity.Notification;
+import net.dds.ems.entity.Notification;
 import net.dds.ems.repository.NotificationRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,26 @@ public class NotificationService {
     private NotificationDtoMapper notificationDtoMapper;
 
 
-    public Notification createNotification(Notification notification) throws Exception {
-        try {
-            this.notificationRepository.save(notification);
+    public NotificationDto createNotification(NotificationDto notificationDto) throws Exception {
+        // Vérification des champs obligatoires dans le DTO
+        if (notificationDto.message() == null) {
+            throw new BadRequestException("Le message est obligatoire et ne doit pas etre vide");
+        }
+        if (notificationDto.type() == null) {
+            throw new BadRequestException("Le champ type est obligatoire et ne doit pas etre vide");
+        }
+        if (notificationDto.etat() == null) {
+            throw new BadRequestException("le champ etat est obligatoire et ne doit pas etre vide");
+        }
 
+        Notification notification = notificationDtoMapper.toEntity(notificationDto);
+
+        try {
+            Notification savedNotification = this.notificationRepository.save(notification);
+            return notificationDtoMapper.apply(savedNotification);
         } catch (Exception ex) {
             throw new BadRequestException("exception during creating process, Check your syntax!");
         }
-        return this.notificationRepository.save(notification);
     }
 
 
@@ -50,29 +63,34 @@ public class NotificationService {
     }
 
 
-    public Stream<NotificationDto> showNotificationById(int id) {
-        if (this.notificationRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("This Notification cannot be found");
-        }
-        return this.notificationRepository.findById(id).stream().map(notificationDtoMapper);
+    public NotificationDto showNotificationById(int id) {
+        return notificationDtoMapper.apply(search(id));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Notification updateNotification(int id, Notification notification) throws Exception {
-        Notification existingNotification = this.search(id);
+    public NotificationDto updateNotification(NotificationDto notificationDto) throws Exception {
+        // Vérification des champs obligatoires dans le DTO
+        if (notificationDto.id() == null) {
+            throw new BadRequestException("L'id est obligatoire et ne doit pas etre vide");
+        }
+        if (notificationDto.message() == null) {
+            throw new BadRequestException("Le message est obligatoire et ne doit pas etre vide");
+        }
+        if (notificationDto.type() == null) {
+            throw new BadRequestException("Le champ type est obligatoire et ne doit pas etre vide");
+        }
+        if (notificationDto.etat() == null) {
+            throw new BadRequestException("le champ etat est obligatoire et ne doit pas etre vide");
+        }
 
-        if (notification.getMessage() != null) {
-            existingNotification.setMessage(notification.getMessage());
-        }
-        if (notification.getEtat() != null) {
-            existingNotification.setEtat(notification.getEtat());
-        }
+        Notification notification = notificationDtoMapper.toEntity(notificationDto);
+
         try {
-            this.notificationRepository.save(existingNotification);
+            Notification savedNotification = this.notificationRepository.save(notification);
+            return notificationDtoMapper.apply(savedNotification);
         } catch (Exception ex) {
             throw new BadRequestException("bad syntax for updating notification");
         }
-        return this.notificationRepository.save(existingNotification);
     }
 
     public void deleteNotification(int id) {

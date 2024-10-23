@@ -1,6 +1,5 @@
 package net.dds.ems.dtoMapper;
 
-import net.dds.ems.entity.SousCaissierDto;
 import net.dds.ems.dto.SousCaissierDto;
 import net.dds.ems.entity.SousCaissier;
 import net.dds.ems.entity.SousCaissier;

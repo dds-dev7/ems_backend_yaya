@@ -7,6 +7,7 @@ import net.dds.ems.entity.*;
 import net.dds.ems.repository.*;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -39,10 +40,41 @@ public class RechargeService {
     @Autowired
     private HoraireRepository horaireRepository;
 
+    @Autowired
+    private RevendeurRepository revendeurRepository;
 
-    public Recharge createRecharge(Recharge recharge) throws Exception {
-        if (!recharge.getActeur().equals("revendeur") && !recharge.getActeur().equals("admin")) {
-            throw new Exception("Verifier le champ acteur");
+
+    public RechargeDto createRecharge(RechargeDto rechargeDto) throws Exception {
+
+        // Vérification des champs obligatoires dans le DTO
+        if (rechargeDto.type() == null || rechargeDto.type().trim().isEmpty()) {
+            throw new BadRequestException("Le type est obligatoire et ne doit pas etre vide");
+        }
+        if (rechargeDto.montant() == null) {
+            throw new BadRequestException("Le montant est obligatoire et ne doit pas etre vide");
+        }
+        if (rechargeDto.date() == null) {
+            throw new BadRequestException("Le date est obligatoire et ne doit pas etre vide");
+        }
+        if (rechargeDto.statut() == null) {
+            throw new BadRequestException("Le statut est obligatoire et ne doit pas etre vide");
+        }
+        if (rechargeDto.service() == null) {
+            throw new BadRequestException("Le role est obligatoire et ne doit pas etre vide");
+        }
+        if (rechargeDto.acteur() == null) {
+            throw new BadRequestException("L'acteur est obligatoire et ne doit pas etre vide");
+        }
+
+        Recharge recharge = rechargeDtoMapper.toEntity(rechargeDto);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof Admin admin) {
+            recharge.setAdmin(admin);
+        } else if (principal instanceof Revendeur revendeur) {
+            recharge.setAssignerA(revendeur);
+        } else {
+            throw new EntityNotFoundException("Erreur de recuperation de l'utilisateur");
         }
 
         Service service = recharge.getService();
@@ -55,12 +87,10 @@ public class RechargeService {
             String today = LocalDateTime.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRENCH);
             Horaire corHoraire = horaireRepository.findByRevendeurIdAndJour(revendeur.getId(), today);
             LocalTime currentTime = LocalTime.now();
-            if (!(currentTime.isAfter(corHoraire.getDateDebut()) && currentTime.isBefore(corHoraire.getDateFin()))) {
+            if (!(currentTime.isAfter(corHoraire.getHeureDebut()) && currentTime.isBefore(corHoraire.getHeureFin()))) {
                 throw new Exception("Vous etes pas autoriser a vous recharger actuellement");
             }
         }
-        //Prendre le jour actuelle et mapper les horaires du revendeur correspondant en fonction de ce jour
-        //Si on est dans l'intervalle entre l'horaire de debut et de fin accepter la transaction sin retourner une erreur disant que les heures sont fermer
 
         if (service != null && service.getId() != 0) {
             Optional<Service> optionalService = serviceRepository.findById(service.getId());
@@ -69,12 +99,10 @@ public class RechargeService {
             throw new BadRequestException("Error getting the service");
         }
 
-        if (revendeur != null && revendeur.getId() != 0) {
-            Optional<Revendeur> optionalRevendeur = utilisateurRepository.findById(revendeur.getId())
-                    .filter(utilisateur -> utilisateur instanceof Revendeur)
-                    .map(utilisateur -> (Revendeur) utilisateur);
-            crediterCaisse = optionalRevendeur.get().getCrediterCaisse();
-            recharge.setAssignerA((Revendeur) optionalRevendeur.orElseThrow(() -> new EntityNotFoundException("This recouveur doesn't exist")));
+        if (revendeur != null && revendeur.getId() != 0 && revendeur.getCrediterCaisse()) {
+            Revendeur optionalRevendeur = revendeurRepository.findById(revendeur.getId()).orElseThrow(()-> new EntityNotFoundException("Le revendeur avec cet id n'existe pas"));
+            crediterCaisse = optionalRevendeur.getCrediterCaisse();
+            recharge.setAssignerA(optionalRevendeur);
         } else {
             throw new BadRequestException("Error getting revendeur");
         }
@@ -109,17 +137,11 @@ public class RechargeService {
         // verifier si le revendeur est autorise a se recharger lui meme, si oui la case admin sera nulle si non
 
         try {
-            //Saving the creation date
-            recharge.setDate(LocalDateTime.now());
-
-            recharge.setStatut("effectuer");
-
-            this.rechargeRepository.save(recharge);
-
+            Recharge savedRecharge = rechargeRepository.save(recharge);
+            return rechargeDtoMapper.apply(savedRecharge);
         } catch (Exception ex) {
             throw new BadRequestException("exception during creating process, Check your syntax!");
         }
-        return this.rechargeRepository.save(recharge);
     }
 
 
@@ -137,13 +159,10 @@ public class RechargeService {
         return this.rechargeRepository.findAll().stream().map(rechargeDtoMapper);
     }
 
-    public Stream<RechargeDto> showRechargeById(int id) {
-        if (this.rechargeRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("This Recharge cannot be found");
-        }
-        return this.rechargeRepository.findById(id).stream().map(rechargeDtoMapper);
-    }
+    public RechargeDto showRechargeById(int id) {
 
+        return rechargeDtoMapper.apply(search(id));
+    }
 
     public void deleteRecharge(int id) {
         if (!this.rechargeRepository.findById(id).isPresent())

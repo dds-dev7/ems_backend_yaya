@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("ENROLLEUR")
 @EqualsAndHashCode(callSuper = true)
-public class Enrolleur extends Agent {
+public class Enrolleur extends Utilisateur {
 
 
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("RECOUVREUR")
 @EqualsAndHashCode(callSuper = true)
-public class Recouvreur extends Agent {
+public class Recouvreur extends Utilisateur {
 
 
 }

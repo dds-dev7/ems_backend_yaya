@@ -1,7 +1,6 @@
 package net.dds.ems.dtoMapper;
 
 import net.dds.ems.dto.RecouvreurDto;
-import net.dds.ems.entity.TransactionRecouvreurDto;
 import net.dds.ems.dto.TransactionRecouvreurDto;
 import net.dds.ems.entity.TransactionRecouvreur;
 import net.dds.ems.entity.TransactionRecouvreur;

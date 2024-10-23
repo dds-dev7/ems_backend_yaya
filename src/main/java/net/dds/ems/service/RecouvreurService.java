@@ -55,9 +55,6 @@ public class RecouvreurService {
             }
             recouvreur.setNumeroIdentifiant(maxNumeroIdentifiant);
 
-            //Saving the creation date
-            recouvreur.setDateCreation(LocalDateTime.now());
-
             this.utilisateurRepository.save(recouvreur);
 
         }catch (Exception ex){

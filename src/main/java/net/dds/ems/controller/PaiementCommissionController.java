@@ -24,9 +24,9 @@ public class PaiementCommissionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity <PaiementCommission> createPaiementCommission(@RequestBody PaiementCommission paiementCommission) throws Exception {
-        PaiementCommission createdPaiementCommmission = this.paiementCommissionService.createPaiementCommission(paiementCommission);
-        return new ResponseEntity<PaiementCommission>(createdPaiementCommmission,HttpStatus.CREATED);
+    public ResponseEntity<PaiementCommissionDto> createPaiementCommission(@RequestBody PaiementCommissionDto paiementCommission) throws Exception {
+        PaiementCommissionDto createdPaiementCommmission = this.paiementCommissionService.createPaiementCommission(paiementCommission);
+        return new ResponseEntity<>(createdPaiementCommmission,HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -37,14 +37,14 @@ public class PaiementCommissionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<PaiementCommissionDto> showPaiementCommissionById(@PathVariable int id){
+    public PaiementCommissionDto showPaiementCommissionById(@PathVariable int id){
         return this.paiementCommissionService.showPaiementCommissionById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaiementCommission> updatePaiementCommission(@PathVariable int id, @RequestBody PaiementCommission paiementCommission) throws Exception {
-        PaiementCommission updatedPaiementCommission = this.paiementCommissionService.updatePaiementCommission(id, paiementCommission);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PaiementCommissionDto> updatePaiementCommission(@RequestBody PaiementCommissionDto paiementCommission) throws Exception {
+        PaiementCommissionDto updatedPaiementCommission = this.paiementCommissionService.updatePaiementCommission(paiementCommission);
         return new ResponseEntity<>(updatedPaiementCommission, HttpStatus.CREATED);
     }
 

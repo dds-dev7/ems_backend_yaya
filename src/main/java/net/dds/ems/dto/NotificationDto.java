@@ -5,5 +5,6 @@ import java.time.LocalDateTime;
 public record NotificationDto(
         Integer id,
         String message,
+        String type,
         String etat
 ) {}

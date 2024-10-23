@@ -1,7 +1,6 @@
 package net.dds.ems.controller;
 
 import net.dds.ems.dto.HoraireDto;
-import net.dds.ems.entity.Horaire;
 import net.dds.ems.service.HoraireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +21,8 @@ public class HoraireController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<Horaire> createHoraire(@RequestBody Horaire horaire) throws Exception {
-        Horaire createdHoraire = this.horaireService.createHoraire(horaire);
+    public ResponseEntity<HoraireDto> createHoraire(@RequestBody HoraireDto horaire) throws Exception {
+        HoraireDto createdHoraire = this.horaireService.createHoraire(horaire);
         return new ResponseEntity<>(createdHoraire, HttpStatus.CREATED);
     }
 
@@ -40,9 +39,16 @@ public class HoraireController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public void modifier(@PathVariable int id, @RequestBody Horaire horaire) throws Exception {
-        this.horaireService.updateHoraire(id, horaire);
+    @GetMapping(path = "/readById/{id}")
+    public HoraireDto showHoraireById(@PathVariable int id){
+        return this.horaireService.showHoraireById(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<HoraireDto> modifier(@RequestBody HoraireDto horaire) throws Exception {
+        HoraireDto createdHoraire = this.horaireService.updateHoraire(horaire);
+        return new ResponseEntity<>(createdHoraire, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

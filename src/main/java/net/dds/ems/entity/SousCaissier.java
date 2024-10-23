@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("SOUSCAISSIER")
 @EqualsAndHashCode(callSuper = true)
-public class SousCaissier extends Agent {
+public class SousCaissier extends Utilisateur {
 
 
 }

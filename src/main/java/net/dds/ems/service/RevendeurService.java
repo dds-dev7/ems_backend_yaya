@@ -3,10 +3,8 @@ package net.dds.ems.service;
 import jakarta.persistence.EntityNotFoundException;
 import net.dds.ems.dto.RevendeurDto;
 import net.dds.ems.dtoMapper.RevendeurDtoMapper;
+import net.dds.ems.entity.*;
 import net.dds.ems.entity.Revendeur;
-import net.dds.ems.entity.Recouvreur;
-import net.dds.ems.entity.Revendeur;
-import net.dds.ems.entity.Role;
 import net.dds.ems.repository.RecouvreurRepository;
 import net.dds.ems.repository.RevendeurRepository;
 import net.dds.ems.repository.RoleRepository;
@@ -32,6 +30,8 @@ public class RevendeurService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    @Autowired
+    private RevendeurRepository revendeurRepository;
 
     @Autowired
     private RevendeurDtoMapper revendeurDtoMapper;
@@ -41,8 +41,6 @@ public class RevendeurService {
 
     @Autowired
     private RecouvreurRepository recouvreurRepository;
-
-
 
     public Revendeur createRevendeur(Revendeur revendeur)  throws Exception{
         Role role = revendeur.getRole();
@@ -66,7 +64,7 @@ public class RevendeurService {
         revendeur.setMotDePasse(encoder.encode(revendeur.getMotDePasse()));
         try{
             //Generating special value for revendeur
-            Integer maxNumeroIdentifiant = utilisateurRepository.findMaxNumeroIdentifiantByType(Revendeur.class);
+            Integer maxNumeroIdentifiant = revendeurRepository.findMaxNumeroIdentifiant();
             if(maxNumeroIdentifiant == null){
                 maxNumeroIdentifiant = 40000;
             }else {
@@ -75,44 +73,39 @@ public class RevendeurService {
             revendeur.setNumeroIdentifiant(maxNumeroIdentifiant);
 
             //Saving the creation date
-            revendeur.setDateCreation(LocalDateTime.now());
+//            revendeur.setDateCreation(LocalDateTime.now());
 
-
-            this.utilisateurRepository.save(revendeur);
+            this.revendeurRepository.save(revendeur);
         }catch (Exception ex){
-            throw new BadRequestException("exception during creating process, Check your syntax!");
+            System.out.println(ex);
+            throw new BadRequestException(ex.getMessage());
         }
 
-        return utilisateurRepository.save(revendeur);
+        return revendeurRepository.save(revendeur);
 
     }
 
     // Search for a Revendeur by ID
     public Revendeur search(int id) {
-        Optional<Revendeur> optionalRevendeur = utilisateurRepository.findById(id)
-                .filter(utilisateur -> utilisateur instanceof Revendeur)
-                .map(utilisateur -> (Revendeur) utilisateur);
-
+        Optional<Revendeur> optionalRevendeur = this.revendeurRepository.findById(id);
         return optionalRevendeur.orElseThrow(
-                () -> new EntityNotFoundException("Aucun revendeur n'existe avec cet id")
+                ()-> new EntityNotFoundException("Aucune Revendeur n'existe avec cet id")
         );
     }
 
     // Show all Revendeurs
     public Stream<RevendeurDto> showRevendeur() {
-        return utilisateurRepository.findAll().stream()
-                .filter(utilisateur -> utilisateur instanceof Revendeur)
-                .map(utilisateur -> (Revendeur) utilisateur)
-                .map(revendeurDtoMapper);
+        if(this.revendeurRepository.findAll().isEmpty()){
+            throw new EntityNotFoundException("No Revendeur found")   ;
+        }
+        return this.revendeurRepository.findAll().stream().map(revendeurDtoMapper);
     }
 
     // Show a specific Revendeur by ID
-    public Stream<RevendeurDto> showRevendeurById(int id) {
-        return utilisateurRepository.findById(id)
-                .filter(utilisateur -> utilisateur instanceof Revendeur)
-                .map(utilisateur -> (Revendeur) utilisateur)
-                .stream()
-                .map(revendeurDtoMapper);
+    public RevendeurDto showRevendeurById(int id) {
+        Revendeur revendeur = revendeurRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Revendeur by id " + id + " was not found"));
+        return revendeurDtoMapper.apply(revendeur);
     }
 
 
@@ -174,16 +167,16 @@ public class RevendeurService {
         }
 
         try{
-            this.utilisateurRepository.save(existingRevendeur);
+            this.revendeurRepository.save(existingRevendeur);
         }catch (IllegalArgumentException ex){
 
             throw new IllegalArgumentException(ex.getMessage());
         }
-        return this.utilisateurRepository.save(existingRevendeur);
+        return this.revendeurRepository.save(existingRevendeur);
     }
 
     public void deleteRevendeur(int id) {
-        if (!this.utilisateurRepository.findById(id).isPresent()) throw new EntityNotFoundException("Aucun revendeur n'existe avec cet id");
-        this.utilisateurRepository.deleteById(id);
+        if (!this.revendeurRepository.findById(id).isPresent()) throw new EntityNotFoundException("Aucun revendeur n'existe avec cet id");
+        this.revendeurRepository.deleteById(id);
     }
 }

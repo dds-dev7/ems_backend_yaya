@@ -58,8 +58,6 @@ public class SousCaissierService {
 
             sousCaissier.setNumeroIdentifiant(maxNumeroIdentifiant);
 
-            //Saving the creation date
-            sousCaissier.setDateCreation(LocalDateTime.now());
             this.utilisateurRepository.save(sousCaissier);
 
         } catch (Exception ex) {

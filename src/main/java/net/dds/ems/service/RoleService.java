@@ -4,7 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import net.dds.ems.dto.RoleDto;
 import net.dds.ems.dtoMapper.RoleDtoMapper;
 import net.dds.ems.entity.Role;
-import net.dds.ems.repository.*;
+import net.dds.ems.repository.RoleRepository;
+import net.dds.ems.repository.UtilisateurRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,11 @@ public class RoleService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
-    public Role createRole(Role role)  throws Exception{
-        try{
+    public Role createRole(Role role) throws Exception {
+        try {
             this.roleRepository.save(role);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new BadRequestException("exception during creating process, Check your syntax!");
         }
 
@@ -41,28 +42,28 @@ public class RoleService {
     public Role search(int id) {
         Optional<Role> optionalRole = this.roleRepository.findById(id);
         return optionalRole.orElseThrow(
-                ()-> new EntityNotFoundException("Aucune role n'existe avec cet id")
+                () -> new EntityNotFoundException("Aucune role n'existe avec cet id")
         );
     }
 
     public Stream<RoleDto> showRole() {
-        if(this.roleRepository.findAll().isEmpty()){
-            throw new EntityNotFoundException("No Role found")   ;
+        if (this.roleRepository.findAll().isEmpty()) {
+            throw new EntityNotFoundException("No Role found");
         }
         return this.roleRepository.findAll().stream().map(roleDtoMapper);
     }
 
 
     public Stream<RoleDto> showRoleById(int id) {
-        if(this.roleRepository.findById(id).isEmpty()){
-            throw new EntityNotFoundException("This Role cannot be found")   ;
+        if (this.roleRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("This Role cannot be found");
         }
         return this.roleRepository.findById(id).stream().map(roleDtoMapper);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Role updateRole(int id, Role role) throws Exception {
-        Role existingRole= this.search(id);
+        Role existingRole = this.search(id);
 
         if (role.getNom() != null) {
             existingRole.setNom(role.getNom());
@@ -70,11 +71,9 @@ public class RoleService {
         if (role.getDroit() != null) {
             existingRole.setDroit(role.getDroit());
         }
-
-
-        try{
+        try {
             this.roleRepository.save(existingRole);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new BadRequestException("bad syntax for updating role");
         }
         return this.roleRepository.save(existingRole);
@@ -82,7 +81,8 @@ public class RoleService {
 
 
     public void deleteRole(int id) {
-        if (!this.roleRepository.findById(id).isPresent()) throw new EntityNotFoundException("Aucune role n'existe avec cet id");
+        if (!this.roleRepository.findById(id).isPresent())
+            throw new EntityNotFoundException("Aucune role n'existe avec cet id");
 
         Role roleToDelete = roleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Rôle non trouvé"));

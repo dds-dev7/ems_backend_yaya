@@ -31,7 +31,7 @@ public class AdminService {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Create an Admin admin in the single table inheritance
+    // Create an admin in the single table inheritance
     public AdminDto createAdmin(AdminDto adminDto) throws Exception {
         // Vérification des champs obligatoires dans le DTO
         if (adminDto.nom() == null || adminDto.nom().trim().isEmpty()) {
@@ -46,20 +46,17 @@ public class AdminService {
         if (adminDto.motDePasse() == null || adminDto.motDePasse().trim().isEmpty()) {
             throw new BadRequestException("Le mot de passe est obligatoire et ne doit pas etre vide");
         }
-        if (adminDto.role() == null || adminDto.role().id() == null) {
+        if (adminDto.role() == null) {
             throw new BadRequestException("Le role est obligatoire et ne doit pas etre vide");
         }
-        Admin admin = adminDtoMapper.toEntity(adminDto);
-        Role role = admin.getRole();
-        if (role != null && role.getId() != 0) {
-            Optional<Role> optionalRole = roleRepository.findById(role.getId());
-            if (!optionalRole.isPresent() || !optionalRole.get().getNom().equals("ADMIN")) {
-                throw new BadRequestException("Un admin ne peut pas être créé avec ce rôle");
-            }
-            admin.setRole(optionalRole.get());
-        } else {
-            throw new BadRequestException("Erreur lors de la récupération du rôle");
+
+        Role role = roleRepository.findById(adminDto.role().id()).orElseThrow(() -> new EntityNotFoundException("Erreur lors de la récupération du rôle"));
+        if (!role.getNom().equals("ADMIN")) {
+            throw new BadRequestException("Un admin ne peut pas être créé avec ce rôle");
         }
+        Admin admin = adminDtoMapper.toEntity(adminDto);
+
+        admin.setRole(role);
 
         // Set the MotDePasse
         admin.setMotDePasse(encoder.encode(admin.getMotDePasse()));
@@ -72,17 +69,6 @@ public class AdminService {
         }
     }
 
-    // Search for an Admin by ID
-    public Admin search(int id) {
-        Optional<Admin> optionalAdmin = utilisateurRepository.findById(id)
-                .filter(utilisateur -> utilisateur instanceof Admin)
-                .map(utilisateur -> (Admin) utilisateur);
-
-        return optionalAdmin.orElseThrow(
-                () -> new EntityNotFoundException("Aucun admin n'existe avec cet id")
-        );
-    }
-
     // Show all Admins
     public Stream<AdminDto> showAdmin() {
         return utilisateurRepository.findAll().stream()
@@ -92,18 +78,21 @@ public class AdminService {
     }
 
     // Show a specific Admin by ID
-    public Stream<AdminDto> showAdminById(int id) {
-        return utilisateurRepository.findById(id)
+    public AdminDto showAdminById(int id) {
+        Admin retAdmin = utilisateurRepository.findById(id)
                 .filter(utilisateur -> utilisateur instanceof Admin)
-                .map(utilisateur -> (Admin) utilisateur)
-                .stream()
-                .map(adminDtoMapper);
+                .map(utilisateur -> (Admin) utilisateur).orElseThrow(() -> new EntityNotFoundException("Cet Admin n'existe pas"));
+
+        return adminDtoMapper.apply(retAdmin);
     }
 
     // Update an existing Admin
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public AdminDto updateAdmin(AdminDto adminDto) throws Exception {
         // Vérification des champs obligatoires dans le DTO
+        if (adminDto.id() == 0 ) {
+            throw new BadRequestException("L'Id est obligatoire pour la modification");
+        }
         if (adminDto.nom() == null || adminDto.nom().trim().isEmpty()) {
             throw new BadRequestException("Le nom est obligatoire et ne doit pas etre vide");
         }
@@ -113,14 +102,21 @@ public class AdminService {
         if (adminDto.statut() == null) {
             throw new BadRequestException("Le statut est obligatoire et ne doit pas etre vide");
         }
-        if (adminDto.motDePasse() == null || adminDto.motDePasse().trim().isEmpty()) {
-            throw new BadRequestException("Le mot de passe est obligatoire et ne doit pas etre vide");
-        }
-        if (adminDto.role() == null || adminDto.role().id() == null) {
+        if (adminDto.role() == null) {
             throw new BadRequestException("Le role est obligatoire et ne doit pas etre vide");
         }
 
         Admin admin = adminDtoMapper.toEntity(adminDto);
+        if (adminDto.motDePasse() != null) {
+            String passwordCrypt = this.encoder.encode(adminDto.motDePasse());
+            admin.setMotDePasse(passwordCrypt);
+        } else {
+            Optional<Admin> existingAdmin = utilisateurRepository.findById(adminDto.id())
+                    .filter(utilisateur -> utilisateur instanceof Admin)
+                    .map(utilisateur -> (Admin) utilisateur);
+            existingAdmin.ifPresent(value -> admin.setMotDePasse(value.getMotDePasse()));
+        }
+
         Role role = admin.getRole();
         if (role != null && role.getId() != 0) {
             Optional<Role> optionalRole = roleRepository.findById(role.getId());
@@ -132,23 +128,16 @@ public class AdminService {
             throw new BadRequestException("Erreur lors de la récupération du rôle");
         }
 
-//        if (admin.getNom() != null) existingAdmin.setNom(admin.getNom());
-//        if (admin.getNumero() != null) existingAdmin.setNumero(admin.getNumero());
-//        if (admin.getMotDePasse() != null) existingAdmin.setMotDePasse(admin.getMotDePasse());
-//        if (admin.getRole() != null) existingAdmin.setRole(admin.getRole());
-
         try {
             Admin savedAdmin = this.utilisateurRepository.save(admin);
             return adminDtoMapper.apply(savedAdmin);
         } catch (Exception ex) {
             throw new BadRequestException("Erreur lors de la mise à jour de l'admin, vérifiez votre syntaxe !");
         }
-
     }
 
     // Delete an Admin by ID
     public void deleteAdmin(int id) {
-        Admin existingAdmin = this.search(id);
-        utilisateurRepository.delete(existingAdmin);
+        utilisateurRepository.deleteById(id);
     }
 }

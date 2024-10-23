@@ -49,7 +49,7 @@ public class RecouvrementService {
         return null;
     }
 
-    public Recouvrement createRecouvrement(Recouvrement recouvrement)  throws Exception{
+    public RecouvrementDto createRecouvrement(RecouvrementDto recouvrement)  throws Exception{
 
         Service service = recouvrement.getService();
         Recouvreur recouvreur = recouvrement.getAgentRecouvreur();
@@ -67,9 +67,7 @@ public class RecouvrementService {
         }
 
         if (revendeur != null && revendeur.getId() != 0) {
-            Optional<Revendeur> optionalRevendeur= utilisateurRepository.findById(revendeur.getId())
-                    .filter(utilisateur -> utilisateur instanceof Revendeur)
-                    .map(utilisateur -> (Revendeur) utilisateur);
+            Optional<Revendeur> optionalRevendeur= revendeurRepository.findById(revendeur.getId());
             recouvrement.setAgentRevendeur(optionalRevendeur.orElseThrow(()-> new EntityNotFoundException("This recouveur doesn't exist")));
         }else{
             throw new BadRequestException("Error getting revendeur");
@@ -123,34 +121,32 @@ public class RecouvrementService {
         return this.recouvrementRepository.findAll().stream().map(recouvrementDtoMapper);
     }
 
-    public Stream<RecouvrementDto> showRecouvrementById(int id) {
-        if(this.recouvrementRepository.findById(id).isEmpty()){
-            throw new EntityNotFoundException("This Recouvrement cannot be found")   ;
-        }
-        return this.recouvrementRepository.findById(id).stream().map(recouvrementDtoMapper);
+    public RecouvrementDto showRecouvrementById(int id) {
+        return recouvrementDtoMapper.apply(search(id));
     }
-//
-//    public void updateRecouvrement(int id, Recouvrement recouvrement) throws Exception {
-//        Recouvrement existingRecouvrement= this.search(id);
-//
-//        if(existingRecouvrement.getId() == id) {
-//            existingRecouvrement.setMontant(recouvrement.getMontant());
-//            existingRecouvrement.setDate(LocalDateTime.now());
-//            existingRecouvrement.setService(recouvrement.getService());
-//            existingRecouvrement.setAgentRevendeur(recouvrement.getAgentRevendeur());
-//            existingRecouvrement.setAgentRecouvreur(recouvrement.getAgentRecouvreur());
-//        }else{
-//            throw new EntityNotFoundException("Exception updating the 'recouvrement' check your syntax");
-//        }
-//        try{
-//            this.recouvrementRepository.save(existingRecouvrement);
-//        }catch (Exception ex){
-//            throw new BadRequestException("bad syntax for updating recouvrement");
-//        }
-//    }
 
-//    public void deleteRecouvrement(int id) {
-//        if (!this.recouvrementRepository.findById(id).isPresent()) throw new EntityNotFoundException("Aucune recouvrement n'existe avec cet id");
-//        this.recouvrementRepository.deleteById(id);
-//    }
+
+    public void updateRecouvrement(int id, Recouvrement recouvrement) throws Exception {
+        Recouvrement existingRecouvrement= this.search(id);
+
+        if(existingRecouvrement.getId() == id) {
+            existingRecouvrement.setMontant(recouvrement.getMontant());
+            existingRecouvrement.setDate(LocalDateTime.now());
+            existingRecouvrement.setService(recouvrement.getService());
+            existingRecouvrement.setAgentRevendeur(recouvrement.getAgentRevendeur());
+            existingRecouvrement.setAgentRecouvreur(recouvrement.getAgentRecouvreur());
+        }else{
+            throw new EntityNotFoundException("Exception updating the 'recouvrement' check your syntax");
+        }
+        try{
+            this.recouvrementRepository.save(existingRecouvrement);
+        }catch (Exception ex){
+            throw new BadRequestException("bad syntax for updating recouvrement");
+        }
+    }
+
+    public void deleteRecouvrement(int id) {
+        if (!this.recouvrementRepository.findById(id).isPresent()) throw new EntityNotFoundException("Aucune recouvrement n'existe avec cet id");
+        this.recouvrementRepository.deleteById(id);
+    }
 }

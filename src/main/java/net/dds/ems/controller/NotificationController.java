@@ -21,8 +21,8 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping(path = "/create")
-    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) throws Exception {
-        Notification createdNotification = this.notificationService.createNotification(notification);
+    public ResponseEntity<NotificationDto> createNotification(@RequestBody NotificationDto notification) throws Exception {
+        NotificationDto createdNotification = this.notificationService.createNotification(notification);
         return new ResponseEntity<>(createdNotification, HttpStatus.CREATED)
 ;    }
 
@@ -32,13 +32,13 @@ public class NotificationController {
     }
 
     @GetMapping(path = "/read/{id}")
-    public Stream<NotificationDto> showNotificationById(@PathVariable int id){
+    public NotificationDto showNotificationById(@PathVariable int id){
         return this.notificationService.showNotificationById(id);
     }
 
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Notification> updateNotification(@PathVariable int id, @RequestBody Notification notification) throws Exception {
-        Notification updatedNotification = this.notificationService.updateNotification(id, notification);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<NotificationDto> updateNotification(@RequestBody NotificationDto notification) throws Exception {
+        NotificationDto updatedNotification = this.notificationService.updateNotification(notification);
         return new ResponseEntity<>(updatedNotification, HttpStatus.CREATED);
     }
 

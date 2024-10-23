@@ -23,8 +23,8 @@ public class RecouvrementController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECOUVREUR')")
     @PostMapping(path = "/create")
-    public ResponseEntity<Recouvrement> createRecouvrement(@RequestBody Recouvrement recouvrement) throws Exception {
-        Recouvrement createdRecouvrement = this.recouvrementService.createRecouvrement(recouvrement);
+    public ResponseEntity<RecouvrementDto> createRecouvrement(@RequestBody RecouvrementDto recouvrement) throws Exception {
+        RecouvrementDto createdRecouvrement = this.recouvrementService.createRecouvrement(recouvrement);
         return new ResponseEntity<>(createdRecouvrement, HttpStatus.CREATED);
     }
 
@@ -36,7 +36,7 @@ public class RecouvrementController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECOUVREUR')")
     @GetMapping(path = "/read/{id}")
-    public Stream<RecouvrementDto> showRecouvrementById(@PathVariable int id){
+    public RecouvrementDto showRecouvrementById(@PathVariable int id){
         return this.recouvrementService.showRecouvrementById(id);
     }
 
@@ -50,9 +50,9 @@ public class RecouvrementController {
     //Les controles de secu sont fait de sorte que l'utilisateur soit sure du recouvrement qu'il veut effectuer
     //De ce fait un recouvrement enregistrer ne peux plus etre supprimer.
 
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-//    @DeleteMapping(path = "/delete/{id}")
-//    public void deleteRecouvrement(@PathVariable int id){
-//        this.recouvrementService.deleteRecouvrement(id);
-//    }
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping(path = "/delete/{id}")
+    public void deleteRecouvrement(@PathVariable int id){
+        this.recouvrementService.deleteRecouvrement(id);
+    }
 }

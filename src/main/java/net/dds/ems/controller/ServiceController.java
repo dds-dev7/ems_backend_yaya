@@ -27,7 +27,7 @@ public class ServiceController {
         return new ResponseEntity<>(createdService, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','REVENDEUR')")
     @GetMapping(path = "/read")
     public Stream<ServiceDto> showService(){
         return this.serviceService.showService();

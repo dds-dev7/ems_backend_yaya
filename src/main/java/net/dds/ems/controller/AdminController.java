@@ -23,7 +23,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/inscription")
     public ResponseEntity<AdminDto> createAdmin(@RequestBody AdminDto adminDto) throws Exception {
         AdminDto createdAdmin = this.adminService.createAdmin(adminDto);
@@ -38,12 +37,12 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<AdminDto> showAdminById(@PathVariable int id){
+    public AdminDto showAdminById(@PathVariable int id){
         return this.adminService.showAdminById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<AdminDto> updateAdmin(@RequestBody AdminDto adminDto) throws Exception {
         AdminDto updatedAdmin = this.adminService.updateAdmin(adminDto);
         return new ResponseEntity<>(updatedAdmin, HttpStatus.OK);

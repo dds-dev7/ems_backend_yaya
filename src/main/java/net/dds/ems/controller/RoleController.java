@@ -25,7 +25,6 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(path = "/create")
     public ResponseEntity<Role> createRole(@RequestBody Role role) throws Exception {
         Role createdRole = this.roleService.createRole(role);
@@ -44,7 +43,6 @@ public class RoleController {
         return this.roleService.showRoleById(id);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Role> updateRole(@PathVariable int id, @RequestBody Role role) throws Exception {
         Role updatedRole = this.roleService.updateRole(id, role);

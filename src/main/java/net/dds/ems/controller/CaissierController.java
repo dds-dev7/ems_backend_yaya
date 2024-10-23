@@ -22,8 +22,8 @@ public class CaissierController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<Caissier> createCaissier(@RequestBody Caissier caissier) throws Exception {
-        Caissier createdCaissier = this.caissierService.createCaissier(caissier);
+    public ResponseEntity<CaissierDto> createCaissier(@RequestBody CaissierDto caissierDto) throws Exception {
+        CaissierDto createdCaissier = this.caissierService.createCaissier(caissierDto);
         return new ResponseEntity<>( createdCaissier, HttpStatus.CREATED);
     }
 
@@ -35,14 +35,14 @@ public class CaissierController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<CaissierDto> showCaissierById(@PathVariable int id){
+    public CaissierDto showCaissierById(@PathVariable int id){
         return this.caissierService.showCaissierById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Caissier> modifier(@PathVariable int id, @RequestBody Caissier caissier) throws Exception {
-        Caissier updatedCaissier = this.caissierService.updateCaissier(id, caissier);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CaissierDto> modifier(@RequestBody CaissierDto caissier) throws Exception {
+        CaissierDto updatedCaissier = this.caissierService.updateCaissier(caissier);
         return new ResponseEntity<>(updatedCaissier,HttpStatus.OK);
     }
 

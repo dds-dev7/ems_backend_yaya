@@ -18,14 +18,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 public class CompteInternationaleController {
 
-
     @Autowired
     private CompteInternationaleService compteInternationaleService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<CompteInternationale> createCompteInternationale(@RequestBody CompteInternationale compteInternationale) throws Exception {
-        CompteInternationale createdCompteInternationale = this.compteInternationaleService.createCompteInternationale(compteInternationale);
+    public ResponseEntity<CompteInternationaleDto> createCompteInternationale(@RequestBody CompteInternationaleDto compteInternationale) throws Exception {
+        CompteInternationaleDto createdCompteInternationale = this.compteInternationaleService.createCompteInternationale(compteInternationale);
         return new ResponseEntity<>(createdCompteInternationale, HttpStatus.CREATED);
     }
 
@@ -37,14 +36,14 @@ public class CompteInternationaleController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/read/{id}")
-    public Stream<CompteInternationaleDto> showCompteInternationaleById(@PathVariable int id){
+    public CompteInternationaleDto showCompteInternationaleById(@PathVariable int id){
         return this.compteInternationaleService.showCompteInternationaleById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update/{id}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CompteInternationale> updateCompteInternationale(@PathVariable int id, @RequestBody CompteInternationale compteInternationale) throws Exception {
-        CompteInternationale updatedCompteInternationale = this.compteInternationaleService.updateCompteInternationale(id, compteInternationale);
+    @PutMapping(path = "/update", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompteInternationaleDto> updateCompteInternationale(@RequestBody CompteInternationaleDto compteInternationale) throws Exception {
+        CompteInternationaleDto updatedCompteInternationale = this.compteInternationaleService.updateCompteInternationale(compteInternationale);
         return new ResponseEntity<>(updatedCompteInternationale, HttpStatus.OK);
     }
 

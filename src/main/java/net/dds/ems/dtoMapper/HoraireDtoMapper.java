@@ -32,7 +32,7 @@ public class HoraireDtoMapper implements Function<Horaire, HoraireDto>{
         horaire.setHeureDebut(horaireDTO.heureFin());
         horaire.setHeureFin(horaireDTO.heureFin());
         horaire.setJour(horaireDTO.jour());
-        horaire.setRevendeur(revendeurDtoMapper.toEntity(horaireDTO.heureFin()));
+        horaire.setRevendeur(revendeurDtoMapper.toEntity(horaireDTO.revendeur()));
         return horaire;
     }
 }

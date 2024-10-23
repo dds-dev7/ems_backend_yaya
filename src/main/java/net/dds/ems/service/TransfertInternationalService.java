@@ -50,9 +50,6 @@ public class TransfertInternationalService {
         }
 
         try{
-            //Saving the creation date
-            transfertInternational.setDate(LocalDateTime.now());
-
             this.transfertInternationalRepository.save(transfertInternational);
 
         }catch (Exception ex){

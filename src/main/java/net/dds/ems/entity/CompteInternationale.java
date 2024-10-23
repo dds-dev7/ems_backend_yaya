@@ -27,7 +27,6 @@ public class CompteInternationale {
     @NotNull(message= "Comission ne devrait pas etre nulle")
     private Double commission;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;
